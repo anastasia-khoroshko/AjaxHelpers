@@ -1,0 +1,17 @@
+﻿@model List<string>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<h2>Index</h2>
+@Html.Partial("_ListEntry", Model)
+<div id="result"></div>
+@using (Ajax.BeginForm("AddComment", "Home", new AjaxOptions() { UpdateTargetId = "result", InsertionMode = InsertionMode.InsertAfter })
+    )
+{    
+    <textarea id="comment" name="comment"></textarea>
+    <br />
+    <input type="submit" value="Add Comment" />
+}

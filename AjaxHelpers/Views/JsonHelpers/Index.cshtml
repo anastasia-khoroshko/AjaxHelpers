@@ -1,0 +1,51 @@
+﻿@model List<AjaxHelpers.Models.CommentEntity>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<h2>Index</h2>
+    
+<div id="list">
+    @foreach (var com in Model)
+    {
+        <p>Id:@com.Id Text:@com.Text</p>
+    }
+</div>
+<form>
+    <p>ID:</p><input type="text" name="IdCom" id="IdCom" />
+    <p>Comment</p><textarea name="comment" id="comment"></textarea>
+    <br />
+    <button type="button" name="btnAdd" id="btnAdd">Add Comment</button>
+</form>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#btnAdd').click(function (e) {
+                e.preventDefault;
+                var comment = $('#comment').val();
+                var id = $('#IdCom').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/JsonHelpers/AddComment",
+                    data: "{Id: '" + id + "',comment: '" + comment + "'}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var listCom=[];
+                        $.each(data, function(i,elem)
+                        {
+                            listCom[i]="Id:" + elem.Id + "Text:" + elem.Text+"<br/>";
+                        })
+                        $('#list').html(listCom);
+                    },
+                    error: function (data) {
+                    }
+                })
+            })
+        })
+    </script>
+}

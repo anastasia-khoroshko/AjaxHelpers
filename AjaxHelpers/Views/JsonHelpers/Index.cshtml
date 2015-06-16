@@ -3,15 +3,18 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<script src="~/Scripts/jquery-1.8.2.min.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
 <h2>Index</h2>
     
-<div id="list">
+<div>
     @foreach (var com in Model)
     {
         <p>Id:@com.Id Text:@com.Text</p>
     }
+</div>
+<div id="list">
+
 </div>
 <form>
     <p>ID:</p><input type="text" name="IdCom" id="IdCom" />
@@ -28,19 +31,20 @@
                 e.preventDefault;
                 var comment = $('#comment').val();
                 var id = $('#IdCom').val();
+                var obj ={ Id: id, Text: comment };
                 $.ajax({
                     type: "POST",
                     url: "/JsonHelpers/AddComment",
-                    data: "{Id: '" + id + "',comment: '" + comment + "'}",
+                    data: JSON.stringify(obj),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        var listCom=[];
-                        $.each(data, function(i,elem)
-                        {
-                            listCom[i]="Id:" + elem.Id + "Text:" + elem.Text+"<br/>";
-                        })
-                        $('#list').html(listCom);
+                        //var listCom=$.parseJSON(data);
+                        //$.each(listCom, function(i,elem)
+                        //{
+                        //    $('#list').append("Id:" + elem.Id + "Text:" + elem.Text+"<br/>");
+                        //})
+                        $('#list').append("Id:" + data.Id + "Text:" + data.Text + "<br/>");
                     },
                     error: function (data) {
                     }

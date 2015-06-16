@@ -19,17 +19,13 @@ namespace AjaxHelpers.Controllers
             return View(list);
         }
 
-        public ActionResult AddComment(int id,string comment )
+        public ActionResult AddComment(CommentEntity newComment)
         {
-            if (!string.IsNullOrEmpty(comment))
+            if (newComment!=null)
             {
-                list.Add(new CommentEntity()
-                     {
-                         Id = id,
-                         Text = comment
-                     });
+                list.Add(newComment);
                 if (Request.IsAjaxRequest())
-                    return Json(list);
+                    return Json(newComment);
                 return RedirectToAction("Index");
             }
             else return HttpNotFound();
